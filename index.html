@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>陈思制作！</title>
+    <script src="custom.api3.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+    //<![CDATA[
+
+    function load()
+    {
+      if (GBrowserIsCompatible())
+      {
+        var map = new GMap2(document.getElementById("map"));
+        G_HYBRID_MAP.getTileLayers()[0].getOpacity = function () {return 1;};
+        G_HYBRID_MAP.getTileLayers()[1].getOpacity = function () {return 0.5;};
+        map.setCenter(new GLatLng(36.94,106.08),4);
+		map.addControl(new GLargeMapControl(),new GControlPosition(G_ANCHOR_BOTTOM_RIGHT, new GSize(40,200)));
+		map.addControl(new GMapTypeControl(),new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(40,20)));
+		map.enableDoubleClickZoom();
+		map.enableScrollWheelZoom();
+		
+	//点击地图显示经纬度的模块1
+	GEvent.addListener(map, 'click', function(overlay, point) {			    
+			    var latLngStr = '经度：' + point.x + '<br/>纬度：' + point.y + '';
+			   map.openInfoWindowHtml(point, latLngStr);
+			});
+		
+		// Creates a marker at the given point with the given number label
+			function createMarker(point,name,describe,img) {
+ 			var marker = new GMarker(point);
+  			GEvent.addListener(marker, "click", function() {
+    		marker.openInfoWindowHtml("<img src='img/"+img+".jpg'  /><div id='test'><b>" + name +" <br />个人介绍："+describe+"</div></b>");
+  												});
+ 			 return marker;
+											}
+	//模块1结束
+
+// 下载在12.data.xml之中的数据并加载到地图的模块2
+// XML的格式大致是这样的：
+// <markers>
+//   <marker name="XXX" lat="39.98629852076348" lng="116.3574438359872" img="在/img文件夹下的文件名 不用加后缀" describe="  "/>
+//   <marker lat="29.94176113301537" lng="112.6857368551186"/>
+// </markers>
+GDownloadUrl("12.data.xml", function(data, responseCode) {
+  var xml = GXml.parse(data);
+  var markers = xml.documentElement.getElementsByTagName("marker");
+  for (var i = 0; i < markers.length; i++) {
+    var point = new GLatLng(parseFloat(markers[i].getAttribute("lat")),
+                            parseFloat(markers[i].getAttribute("lng")));
+	name = markers[i].getAttribute("name");
+	describe = markers[i].getAttribute("describe");
+	img = markers[i].getAttribute("img");
+    map.addOverlay(new GMarker(point));
+	map.addOverlay(createMarker(point,name,describe,img));
+    }
+});
+      }
+    }
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+    //]]>
+    </script>
+  </head>
+<body onload="load();MM_preloadImages('img/bb.jpg','img/2.jpg','img/cmx.jpg','img/cs.jpg','img/dly.jpg','img/dx.jpg','img/dxm.jpg','img/fyr2.jpg','img/jindan.jpg','img/jrt.jpg','img/kff.jpg','img/koko.jpg','img/lg.jpg','img/lh.jpg','img/liuying.jpg','img/lx.jpg','img/lyj.jpg','img/rd2.jpg','img/rlx.jpg','img/wfj.jpg','img/ww.jpg','img/wxt.jpg','img/wyf.jpg','img/xb.jpg','img/xingxing.jpg','img/xq.jpg','img/yg.jpg','img/yjl.jpg','img/zdy.jpg','img/kzy1.jpg')" onunload="GUnload()">
+    <div id="map" style="width: 800px; height: 600px"></div>
+    <p>呵呵 现在大家不必再忙着去购买经纬仪或者计算太阳和地球的夹角来计算经纬度了 开个玩笑:) map 3.0版再一次为精确定位做出了贡献～</p>
+    <p>版本3.0新功能简介：这次大家可以提供最精确的经纬度给我了 只需要在地图上轻轻单击 就可以显示出精确的经纬度！</p>
+    <p>如果你很支持这个项目 那么烦请提供给我你家精确的经纬度。 另外 因为涉及个人隐私 请不要将这个地址向外宣传 谢谢！ by 陈思</p><br />
+<p> 如果发现地图位置标识错误 或者你想提供更加精确的经纬度以及添加更加个性的自我介绍又或是想添加更漂亮更有个性的照片 请联系我 <a href="mailto:quake@vip.qq.com" target="_blank">quake@vip.qq.com
+  </a></p>
+<hr />
+<p>版本 beta 3.0 我会根据大家的建议尽快推出更完善的版本:)</p>
+<p><a href="http://www.darlingtree.com/wordpress" target="_blank">我的blog </a>欢迎大家访问!</p>
+  </body>
+</html>
